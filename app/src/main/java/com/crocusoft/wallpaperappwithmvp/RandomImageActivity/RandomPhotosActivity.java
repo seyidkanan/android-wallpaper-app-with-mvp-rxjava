@@ -29,6 +29,8 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
+    private GridLayoutManager gridLayoutManager;
+
     private RandomPhotoRVAdapter randomPhotoRVAdapter;
 
     private RandomPhotoContractor.Presenter presenter;
@@ -37,9 +39,10 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     private EditText editTextSearch;
 
-    private Paginate.Callbacks callbacks;
+//    private Paginate.Callbacks callbacks;
 
     private boolean isLoading = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +88,7 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
     }
 
     private void initRV() {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        gridLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
         photoPOJOList = new ArrayList<>();
         randomPhotoRVAdapter = new RandomPhotoRVAdapter(photoPOJOList, this, new RVClickListener() {
@@ -95,34 +98,10 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
             }
         });
 
-        callbacks = new Paginate.Callbacks() {
-            @Override
-            public void onLoadMore() {
-                isLoading = true;
-                if (editTextSearch.getText().toString().length() > 0) {
-                    presenter.loadMoreSearchResult();
-                } else {
-                    presenter.fetchRandomData(false);
-                }
-            }
-
-            @Override
-            public boolean isLoading() {
-                // Indicate whether new page loading is in progress or not
-                return isLoading;
-            }
-
-            @Override
-            public boolean hasLoadedAllItems() {
-                // Indicate whether all data (pages) are loaded or not
-                return false;
-            }
-        };
-
-
-//        recyclerView.setOnScrollListener(new EndlessScrollListener(gridLayoutManager) {
+//        callbacks = new Paginate.Callbacks() {
 //            @Override
-//            public void onLoadMore(int currentPage) {
+//            public void onLoadMore() {
+//                isLoading = true;
 //                if (editTextSearch.getText().toString().length() > 0) {
 //                    presenter.loadMoreSearchResult();
 //                } else {
@@ -131,26 +110,56 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 //            }
 //
 //            @Override
-//            public void onScrollUp() {
-//
+//            public boolean isLoading() {
+//                // Indicate whether new page loading is in progress or not
+//                return isLoading;
 //            }
 //
 //            @Override
-//            public void onScrollDown() {
-//
+//            public boolean hasLoadedAllItems() {
+//                // Indicate whether all data (pages) are loaded or not
+//                return false;
 //            }
-//        });
+//        };
+
+
+        initRVScrollListener();
+
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(randomPhotoRVAdapter);
 
-        Paginate.with(recyclerView, callbacks)
-                .setLoadingTriggerThreshold(5)
-                .addLoadingListItem(true)
-//                .setLoadingListItemCreator(new CustomLoadingListItemCreator())
-//                .setLoadingListItemSpanSizeLookup(new CustomLoadingListItemSpanLookup())
-                .build();
+//        Paginate.with(recyclerView, callbacks)
+//                .setLoadingTriggerThreshold(5)
+//                .addLoadingListItem(true)
+////                .setLoadingListItemCreator(new CustomLoadingListItemCreator())
+////                .setLoadingListItemSpanSizeLookup(new CustomLoadingListItemSpanLookup())
+//                .build();
     }
+
+    private void initRVScrollListener() {
+        recyclerView.setOnScrollListener(new EndlessScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int currentPage) {
+                if (editTextSearch.getText().toString().length() > 0) {
+                    presenter.loadMoreSearchResult();
+                } else {
+                    presenter.fetchRandomData(false);
+                }
+            }
+
+            @Override
+            public void onScrollUp() {
+
+            }
+
+            @Override
+            public void onScrollDown() {
+
+            }
+        });
+    }
+
 
     @Override
     public Context getContext() {
@@ -179,12 +188,18 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     @Override
     public void onDataFetch(List<PhotoPOJO> photoPOJOS, boolean isNeedClear) {
+        unPlugRVListener();
         isLoading = false;
         if (isNeedClear) {
             photoPOJOList.clear();
         }
         photoPOJOList.addAll(photoPOJOS);
         randomPhotoRVAdapter.notifyDataSetChanged();
+        initRVScrollListener();
+    }
+
+    private void unPlugRVListener() {
+        recyclerView.setOnScrollListener(null);
     }
 
     @Override
