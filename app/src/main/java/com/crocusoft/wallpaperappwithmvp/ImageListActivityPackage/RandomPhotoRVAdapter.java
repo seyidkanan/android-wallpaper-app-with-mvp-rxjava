@@ -1,4 +1,4 @@
-package com.crocusoft.wallpaperappwithmvp.RandomImageActivity;
+package com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

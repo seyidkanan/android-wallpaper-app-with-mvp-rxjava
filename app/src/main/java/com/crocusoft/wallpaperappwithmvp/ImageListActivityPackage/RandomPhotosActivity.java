@@ -1,13 +1,15 @@
-package com.crocusoft.wallpaperappwithmvp.RandomImageActivity;
+package com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -17,10 +19,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crocusoft.wallpaperappwithmvp.ImageDescriptionActivityPackage.ImageDescriptionActivity;
 import com.crocusoft.wallpaperappwithmvp.R;
+import com.crocusoft.wallpaperappwithmvp.pojo.ImageTechnicalInfoPOJO;
 import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
+import com.crocusoft.wallpaperappwithmvp.util.Constant;
 import com.crocusoft.wallpaperappwithmvp.util.EndlessScrollListener;
-import com.paginate.Paginate;
+import com.crocusoft.wallpaperappwithmvp.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,26 +44,26 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     private EditText editTextSearch;
 
-//    private Paginate.Callbacks callbacks;
-
-    private boolean isLoading = false;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.random_photos_list_main);
+        setContentView(R.layout.photos_list_main);
 
         new RandomPhotoPresenter(this);
         initViews();
-        isLoading = true;
-        presenter.fetchRandomData(false);
+
+        if (presenter != null) {
+            presenter.fetchRandomData(false);
+        }
     }
 
     private void initViews() {
         progressBar = findViewById(R.id.progressBar);
         recyclerView = findViewById(R.id.recyclerView);
         editTextSearch = findViewById(R.id.editTextSearch);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         editTextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -94,47 +99,17 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
         randomPhotoRVAdapter = new RandomPhotoRVAdapter(photoPOJOList, this, new RVClickListener() {
             @Override
             public void onItemClick(PhotoPOJO photoPOJO) {
-
+                Intent intent = new Intent(RandomPhotosActivity.this, ImageDescriptionActivity.class);
+                intent.putExtra(Constant.BUNDLE_PHOTO_DATA, photoPOJO);
+                startActivity(intent);
             }
         });
-
-//        callbacks = new Paginate.Callbacks() {
-//            @Override
-//            public void onLoadMore() {
-//                isLoading = true;
-//                if (editTextSearch.getText().toString().length() > 0) {
-//                    presenter.loadMoreSearchResult();
-//                } else {
-//                    presenter.fetchRandomData(false);
-//                }
-//            }
-//
-//            @Override
-//            public boolean isLoading() {
-//                // Indicate whether new page loading is in progress or not
-//                return isLoading;
-//            }
-//
-//            @Override
-//            public boolean hasLoadedAllItems() {
-//                // Indicate whether all data (pages) are loaded or not
-//                return false;
-//            }
-//        };
-
 
         initRVScrollListener();
 
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(randomPhotoRVAdapter);
-
-//        Paginate.with(recyclerView, callbacks)
-//                .setLoadingTriggerThreshold(5)
-//                .addLoadingListItem(true)
-////                .setLoadingListItemCreator(new CustomLoadingListItemCreator())
-////                .setLoadingListItemSpanSizeLookup(new CustomLoadingListItemSpanLookup())
-//                .build();
     }
 
     private void initRVScrollListener() {
@@ -167,13 +142,18 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
     }
 
     @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
     public void showErrorMessage(String errorMessage) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        Util.showToast(this, errorMessage);
     }
 
     @Override
     public void showSuccessMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Util.showToast(this, message);
     }
 
     @Override
@@ -189,7 +169,6 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
     @Override
     public void onDataFetch(List<PhotoPOJO> photoPOJOS, boolean isNeedClear) {
         unPlugRVListener();
-        isLoading = false;
         if (isNeedClear) {
             photoPOJOList.clear();
         }

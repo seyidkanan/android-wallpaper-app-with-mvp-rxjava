@@ -1,4 +1,4 @@
-package com.crocusoft.wallpaperappwithmvp.RandomImageActivity;
+package com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage;
 
 import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
 

@@ -1,6 +1,8 @@
 package com.crocusoft.wallpaperappwithmvp.pojo;
 
-public class Urls {
+import java.io.Serializable;
+
+public class Urls implements Serializable {
 
     private String thumb;
     private String small;

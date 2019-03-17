@@ -1,4 +1,4 @@
-package com.crocusoft.wallpaperappwithmvp.RandomImageActivity;
+package com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage;
 
 import com.crocusoft.wallpaperappwithmvp.R;
 import com.crocusoft.wallpaperappwithmvp.pojo.ErrorPOJO;
@@ -18,6 +18,9 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
     private String searchQuery = "";
 
     public RandomPhotoPresenter(RandomPhotoContractor.View view) {
+        if (view == null) {
+            return;
+        }
         this.view = view;
         view.setPresenter(this);
     }

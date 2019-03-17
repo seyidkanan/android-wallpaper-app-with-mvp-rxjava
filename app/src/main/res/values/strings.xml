@@ -2,4 +2,10 @@
     <string name="app_name">Wallpaper App with MVP</string>
     <string name="search">search</string>
     <string name="empty_result">Empty result</string>
+    <string name="string_menu_desc">Desc</string>
+    <string name="no_data">no data</string>
+    <string name="user">User:</string>
+    <string name="view_count">view count</string>
+    <string name="donwloads_count">downloads count</string>
+    <string name="likes_count">likes count</string>
 </resources>

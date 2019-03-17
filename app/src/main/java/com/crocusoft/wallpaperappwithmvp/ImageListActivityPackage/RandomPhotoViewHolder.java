@@ -1,4 +1,4 @@
-package com.crocusoft.wallpaperappwithmvp.RandomImageActivity;
+package com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -44,7 +44,7 @@ public class RandomPhotoViewHolder extends RecyclerView.ViewHolder {
 
         if (photoPOJO.getUrls() != null) {
             if (photoPOJO.getUrls().getSmall() != null) {
-                Util.setImageWithPicasso(context, photoPOJO.getUrls().getSmall(), imageView);
+                Util.setImageWithPicasso(context, photoPOJO.getUrls().getSmall(), imageView, false);
             }
         }
         view.setOnClickListener(new View.OnClickListener() {

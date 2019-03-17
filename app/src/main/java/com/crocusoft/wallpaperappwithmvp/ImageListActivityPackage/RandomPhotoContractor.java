@@ -1,4 +1,4 @@
-package com.crocusoft.wallpaperappwithmvp.RandomImageActivity;
+package com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage;
 
 import android.content.Context;
 
@@ -10,8 +10,6 @@ import java.util.List;
 public interface RandomPhotoContractor {
 
     interface View extends BaseView<Presenter> {
-
-        Context getContext();
 
         void showErrorMessage(String errorMessage);
 
