@@ -36,12 +36,6 @@ public class ImageDescriptionActivity
 
         new ImageDescriptionPresenter(this);
         presenter.startShowPhoto();
-
-
-        CustomDialogInfoImage customDialogInfoImage = new CustomDialogInfoImage(this);
-        PhotoPOJO photoPOJO = new PhotoPOJO();
-        customDialogInfoImage.setData(photoPOJO);
-
     }
 
     private void initViews() {

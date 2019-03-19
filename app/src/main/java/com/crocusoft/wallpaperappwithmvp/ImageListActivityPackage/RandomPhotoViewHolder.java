@@ -31,15 +31,12 @@ public class RandomPhotoViewHolder extends RecyclerView.ViewHolder {
             descriptionTV.setText(photoPOJO.getDescription());
         }
         if (photoPOJO.getLocation() != null) {
-            String locationContent = "";
-            if (photoPOJO.getLocation().getCountry() != null) {
-                locationContent += photoPOJO.getLocation().getCountry() + " ";
+            if (photoPOJO.getLocation().getTitle() != null) {
+                if (photoPOJO.getLocation().getTitle().length() > 0) {
+                    locationTV.setVisibility(View.VISIBLE);
+                    locationTV.setText(photoPOJO.getLocation().getTitle());
+                }
             }
-            if (photoPOJO.getLocation().getCity() != null) {
-                locationContent += photoPOJO.getLocation().getCity() + " ";
-            }
-            locationTV.setVisibility(View.VISIBLE);
-            locationTV.setText(locationContent);
         }
 
         if (photoPOJO.getUrls() != null) {

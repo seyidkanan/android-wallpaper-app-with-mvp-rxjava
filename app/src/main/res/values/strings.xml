@@ -8,4 +8,12 @@
     <string name="view_count">view count</string>
     <string name="donwloads_count">downloads count</string>
     <string name="likes_count">likes count</string>
+    <string name="location">location</string>
+    <string name="camera_title">Camera data</string>
+    <string name="camera_make">Make</string>
+    <string name="camera_model">model</string>
+    <string name="camera_aperture">aperture</string>
+    <string name="camera_exposure_time">exposure time</string>
+    <string name="camera_iso">iso</string>
+    <string name="camera_focal_length">focal length</string>
 </resources>
