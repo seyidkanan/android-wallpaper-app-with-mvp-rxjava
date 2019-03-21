@@ -16,4 +16,6 @@
     <string name="camera_exposure_time">exposure time</string>
     <string name="camera_iso">iso</string>
     <string name="camera_focal_length">focal length</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="try_again">Try again</string>
 </resources>

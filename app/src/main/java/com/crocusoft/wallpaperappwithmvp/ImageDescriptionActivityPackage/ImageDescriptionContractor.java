@@ -10,10 +10,6 @@ public interface ImageDescriptionContractor {
 
     interface View extends BaseView<Presenter> {
 
-        void showErrorMessage(String message);
-
-        void showErrorView(String message);
-
         void enableImage();
 
         void disableImage();

@@ -31,7 +31,9 @@ public class ImageDescriptionActivity
         initViews();
 
         new ImageDescriptionPresenter(this);
-        presenter.startShowPhoto();
+        if (presenter != null) {
+            presenter.startShowPhoto();
+        }
     }
 
     private void initViews() {
@@ -56,7 +58,6 @@ public class ImageDescriptionActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_description) {
-            // TODO: 3/16/19 action for description
             presenter.onDescClick();
             return true;
         }

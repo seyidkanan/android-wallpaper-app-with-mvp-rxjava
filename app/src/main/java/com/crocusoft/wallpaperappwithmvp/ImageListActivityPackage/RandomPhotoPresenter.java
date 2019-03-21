@@ -4,6 +4,7 @@ import com.crocusoft.wallpaperappwithmvp.R;
 import com.crocusoft.wallpaperappwithmvp.pojo.ErrorPOJO;
 import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
 import com.crocusoft.wallpaperappwithmvp.pojo.SearchResponsePOJO;
+import com.crocusoft.wallpaperappwithmvp.util.Util;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
 
     private RandomPhotoModel model;
 
-    private int pageForPagination = 1;
+    private int pageForSearchAPIPagination = 1;
 
     private String searchQuery = "";
 
@@ -33,15 +34,23 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
 
 
     @Override
-    public void fetchRandomData(boolean isWithPagination) {
+    public void fetchRandomData(boolean isNeedClear) {
         if (view == null) {
             return;
         }
+
+        if (Util.isConnected(view.getContext())) {
+            if (isNeedClear) {
+                view.showErrorView(view.getContext().getString(R.string.no_internet_connection));
+                return;
+            }
+        }
+
         view.showProgress();
         checkInitModel();
         searchQuery = "";
-        model.getDataFromRandomApi(isWithPagination);
-        pageForPagination = 1;
+        model.getDataFromRandomApi(isNeedClear);
+        pageForSearchAPIPagination = 1;
     }
 
     @Override
@@ -51,7 +60,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
         }
         checkInitModel();
         searchQuery = query;
-        model.getSearchResultFromApi(query, pageForPagination);
+        model.getSearchResultFromApi(query, pageForSearchAPIPagination);
     }
 
     @Override
@@ -94,7 +103,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
             if (searchResponsePOJO != null) {
                 if (searchResponsePOJO.getResults() != null) {
                     if (searchResponsePOJO.getResults().size() > 0) {
-                        pageForPagination++;
+                        pageForSearchAPIPagination++;
                         onRandomApiSuccess(searchResponsePOJO.getResults(), page == 1);
                     } else {
                         view.showErrorMessage(view.getContext().getString(R.string.empty_result));
@@ -117,7 +126,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
         }
         if (searchQuery.length() > 0) {
             checkInitModel();
-            model.getSearchResultFromApi(searchQuery, pageForPagination);
+            model.getSearchResultFromApi(searchQuery, pageForSearchAPIPagination);
         }
     }
 

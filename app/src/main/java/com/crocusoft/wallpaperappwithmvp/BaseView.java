@@ -11,4 +11,8 @@ public interface BaseView<T> {
 
     Activity getActivity();
 
+    void showErrorView(String message);
+
+    void showErrorMessage(String errorMessage);
+
 }

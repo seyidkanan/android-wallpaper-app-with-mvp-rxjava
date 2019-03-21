@@ -11,8 +11,6 @@ public interface RandomPhotoContractor {
 
     interface View extends BaseView<Presenter> {
 
-        void showErrorMessage(String errorMessage);
-
         void showSuccessMessage(String message);
 
         void showProgress();

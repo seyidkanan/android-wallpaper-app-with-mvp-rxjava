@@ -3,6 +3,7 @@ package com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -14,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,23 +46,37 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     private EditText editTextSearch;
 
+    private ConstraintLayout constraintLayoutErrorView, constraintLayoutDataContainer;
+
+    private TextView textViewErrorMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photos_list_main);
 
         new RandomPhotoPresenter(this);
-        initViews();
 
-        if (presenter != null) {
-            presenter.fetchRandomData(false);
+        if (presenter == null) {
+            // TODO: 3/21/19 show fail init presenter view
+            return;
         }
+        initViews();
+        presenter.fetchRandomData(false);
+    }
+
+
+    public void onClickTryAgainButton(View view) {
+
     }
 
     private void initViews() {
         progressBar = findViewById(R.id.progressBar);
         recyclerView = findViewById(R.id.recyclerView);
         editTextSearch = findViewById(R.id.editTextSearch);
+        textViewErrorMessage = findViewById(R.id.textViewErrorMessage);
+        constraintLayoutDataContainer = findViewById(R.id.constraintLayoutDataContainer);
+        constraintLayoutErrorView = findViewById(R.id.constraintLayoutErrorView);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -147,6 +163,14 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
     }
 
     @Override
+    public void showErrorView(String message) {
+        constraintLayoutErrorView.setVisibility(View.VISIBLE);
+        constraintLayoutDataContainer.setVisibility(View.GONE);
+
+        textViewErrorMessage.setText(message);
+    }
+
+    @Override
     public void showErrorMessage(String errorMessage) {
         Util.showToast(this, errorMessage);
     }
@@ -168,6 +192,9 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     @Override
     public void onDataFetch(List<PhotoPOJO> photoPOJOS, boolean isNeedClear) {
+        constraintLayoutErrorView.setVisibility(View.GONE);
+        constraintLayoutDataContainer.setVisibility(View.VISIBLE);
+
         unPlugRVListener();
         if (isNeedClear) {
             photoPOJOList.clear();
