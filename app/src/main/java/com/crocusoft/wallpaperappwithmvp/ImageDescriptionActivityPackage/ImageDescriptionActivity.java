@@ -1,7 +1,6 @@
 package com.crocusoft.wallpaperappwithmvp.ImageDescriptionActivityPackage;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,13 +8,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.crocusoft.wallpaperappwithmvp.R;
-import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
-import com.crocusoft.wallpaperappwithmvp.util.CustomDialogInfoImage;
+import com.crocusoft.wallpaperappwithmvp.custom_ui.CustomDialogInfoImage;
 import com.crocusoft.wallpaperappwithmvp.util.Util;
 import com.github.chrisbanes.photoview.PhotoView;
 

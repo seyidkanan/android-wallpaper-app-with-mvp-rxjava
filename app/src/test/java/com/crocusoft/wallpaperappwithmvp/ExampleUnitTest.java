@@ -1,5 +1,7 @@
 package com.crocusoft.wallpaperappwithmvp;
 
+import com.crocusoft.wallpaperappwithmvp.util.Util;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -11,7 +13,11 @@ import static org.junit.Assert.*;
  */
 public class ExampleUnitTest {
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+    public void stringLengthFunctionTest() {
+        assertEquals(1, Util.stringLength("1"));
+        assertEquals(3, Util.stringLength("123"));
+        assertEquals(0, Util.stringLength(""));
+        assertEquals(0, Util.stringLength(null));
     }
+
 }
