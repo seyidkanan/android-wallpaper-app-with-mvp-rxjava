@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.crocusoft.wallpaperappwithmvp.R;
 import com.crocusoft.wallpaperappwithmvp.custom_ui.CustomDialogInfoImage;
@@ -22,6 +23,8 @@ public class ImageDescriptionActivity
     private PhotoView imageViewPhoto;
 
     private ImageDescriptionContractor.Presenter presenter;
+
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,8 @@ public class ImageDescriptionActivity
         }
         imageViewPhoto = findViewById(R.id.imageViewPhoto);
         imageViewPhoto.setMaximumScale(10.0f);
+
+        progressBar = findViewById(R.id.progressBarCachingPercentIndicator);
     }
 
     @Override
@@ -87,6 +92,11 @@ public class ImageDescriptionActivity
     @Override
     public ImageView getImageView() {
         return imageViewPhoto;
+    }
+
+    @Override
+    public ProgressBar getProgressBar() {
+        return progressBar;
     }
 
     @Override

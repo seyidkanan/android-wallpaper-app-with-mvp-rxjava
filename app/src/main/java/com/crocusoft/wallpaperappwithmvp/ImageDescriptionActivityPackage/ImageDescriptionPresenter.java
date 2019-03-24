@@ -4,7 +4,6 @@ package com.crocusoft.wallpaperappwithmvp.ImageDescriptionActivityPackage;
 import com.crocusoft.wallpaperappwithmvp.R;
 import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
 import com.crocusoft.wallpaperappwithmvp.util.Constant;
-import com.crocusoft.wallpaperappwithmvp.util.Util;
 
 public class ImageDescriptionPresenter implements ImageDescriptionContractor.Presenter {
 
@@ -31,10 +30,24 @@ public class ImageDescriptionPresenter implements ImageDescriptionContractor.Pre
                 PhotoPOJO photoPOJO = (PhotoPOJO) view.getActivity().getIntent().getSerializableExtra(Constant.BUNDLE_PHOTO_DATA);
                 if (photoPOJO != null) {
                     setPhotoPojo(photoPOJO);
-                    Util.setImageWithPicasso(view.getContext(),
-                            (photoPOJO.getWidth() < 4096 && photoPOJO.getHeight() < 4096) ? photoPOJO.getUrls().getFull() : photoPOJO.getUrls().getRegular(),
-                            view.getImageView(),
-                            true);
+
+
+                    PhotoCacheManager photoCacheManager
+                            = new PhotoCacheManager();
+
+                    photoCacheManager.setActivity(view.getActivity());
+                    photoCacheManager.setImageView(view.getImageView());
+                    photoCacheManager.setPhotoUrl((photoPOJO.getWidth() < 4096 && photoPOJO.getHeight() < 4096) ? photoPOJO.getUrls().getFull() : photoPOJO.getUrls().getRegular());
+                    photoCacheManager.setProgressBar(view.getProgressBar());
+                    photoCacheManager.startCashing();
+
+
+//                    Util.setImageWithPicasso(view.getContext(),
+//                            (photoPOJO.getWidth() < 4096 && photoPOJO.getHeight() < 4096) ? photoPOJO.getUrls().getFull() : photoPOJO.getUrls().getRegular(),
+//                            view.getImageView(),
+//                            true);
+
+
                 } else {
                     view.showErrorMessage(view.getContext().getString(R.string.no_data));
                 }

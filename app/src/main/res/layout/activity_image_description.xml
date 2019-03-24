@@ -26,4 +26,19 @@
         app:layout_constraintVertical_bias="0.50"
         tools:src="@tools:sample/backgrounds/scenic" />
 
+    <ProgressBar
+        android:id="@+id/progressBarCachingPercentIndicator"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/circle_shape"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewPhoto"
+        app:layout_constraintStart_toStartOf="@+id/imageViewPhoto"
+        app:layout_constraintTop_toTopOf="@+id/imageViewPhoto" />
+
 </android.support.constraint.ConstraintLayout>
