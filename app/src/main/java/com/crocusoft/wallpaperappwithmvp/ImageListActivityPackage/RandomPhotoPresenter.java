@@ -39,11 +39,9 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
             return;
         }
 
-        if (Util.isConnected(view.getContext())) {
-            if (isNeedClear) {
-                view.showErrorView(view.getContext().getString(R.string.no_internet_connection));
-                return;
-            }
+        if (!Util.isConnected(view.getContext())) {
+            view.showErrorView(view.getContext().getString(R.string.no_internet_connection));
+            return;
         }
 
         view.showProgress();

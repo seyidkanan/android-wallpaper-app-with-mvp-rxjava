@@ -85,7 +85,7 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (editTextSearch.getText().toString().length() > 0) {
+                    if (editTextSearch.getText().toString().trim().length() > 0) {
                         presenter.searchTextEntered(editTextSearch.getText().toString());
                     } else {
                         presenter.fetchRandomData(true);
@@ -132,7 +132,7 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
         recyclerView.setOnScrollListener(new EndlessScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int currentPage) {
-                if (editTextSearch.getText().toString().length() > 0) {
+                if (editTextSearch.getText().toString().trim().length() > 0) {
                     presenter.loadMoreSearchResult();
                 } else {
                     presenter.fetchRandomData(false);
@@ -182,11 +182,17 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     @Override
     public void showProgress() {
+        constraintLayoutErrorView.setVisibility(View.GONE);
+        constraintLayoutDataContainer.setVisibility(View.VISIBLE);
+
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
+        constraintLayoutErrorView.setVisibility(View.GONE);
+        constraintLayoutDataContainer.setVisibility(View.VISIBLE);
+
         progressBar.setVisibility(View.GONE);
     }
 
