@@ -40,14 +40,6 @@ public class ImageDescriptionPresenter implements ImageDescriptionContractor.Pre
                     photoCacheManager.setPhotoUrl((photoPOJO.getWidth() < 4096 && photoPOJO.getHeight() < 4096) ? photoPOJO.getUrls().getFull() : photoPOJO.getUrls().getRegular());
                     photoCacheManager.setProgressBar(view.getProgressBar());
                     photoCacheManager.startCashing();
-
-
-//                    Util.setImageWithPicasso(view.getContext(),
-//                            (photoPOJO.getWidth() < 4096 && photoPOJO.getHeight() < 4096) ? photoPOJO.getUrls().getFull() : photoPOJO.getUrls().getRegular(),
-//                            view.getImageView(),
-//                            true);
-
-
                 } else {
                     view.showErrorMessage(view.getContext().getString(R.string.no_data));
                 }

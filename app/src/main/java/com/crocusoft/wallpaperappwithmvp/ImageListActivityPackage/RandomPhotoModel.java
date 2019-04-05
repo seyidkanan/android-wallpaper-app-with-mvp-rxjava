@@ -35,61 +35,19 @@ public class RandomPhotoModel implements RandomPhotoContractor.Model {
     }
 
     @Override
-    public void getDataFromRandomApi(final boolean isNeedClear) {
+    public void getDataFromRandomApi(DisposableSingleObserver disposableSingleObserver) {
         if (apiCallBackInterfaces != null) {
             apiService.getRandomPhotosRX(
                     Constant.CLIENT_ID,
                     Constant.PAGINATION_ITEM_COUNT)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(new DisposableSingleObserver<Object>() {
-                        @Override
-                        public void onSuccess(Object o) {
-                            Gson gson = new Gson();
-                            try {
-                                String res = new Gson().toJson(o);
-                                List<PhotoPOJO> photoPOJOS = gson.fromJson(res,
-                                        new TypeToken<List<PhotoPOJO>>() {
-                                        }.getType());
-                                apiCallBackInterfaces.onRandomApiSuccess(photoPOJOS, isNeedClear);
-                            } catch (Exception e) {
-                                apiCallBackInterfaces.onAPIError(null, e);
-                                e.printStackTrace();
-                            }
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            try {
-                                Gson gson = new Gson();
-                                if (e instanceof HttpException) {
-                                    Response response = ((HttpException) e).response();
-                                    ResponseBody body = response.errorBody();
-                                    if (response.code() == 403) {
-                                        ErrorPOJO errorPOJO = new ErrorPOJO();
-                                        List<String> errors = new ArrayList<>();
-                                        errors.add(response.errorBody().string());
-                                        errorPOJO.setErrors(errors);
-                                        apiCallBackInterfaces.onAPIError(errorPOJO, e);
-                                    } else {
-                                        ErrorPOJO errorPOJO = gson.fromJson(body.string(), ErrorPOJO.class);
-                                        apiCallBackInterfaces.onAPIError(errorPOJO, e);
-                                    }
-                                } else {
-                                    apiCallBackInterfaces.onAPIError(null, e);
-                                }
-                            } catch (Exception ex) {
-                                apiCallBackInterfaces.onAPIError(null, ex);
-                                ex.printStackTrace();
-                            }
-                        }
-                    });
+                    .subscribeWith(disposableSingleObserver);
         }
     }
 
     @Override
-    public void getSearchResultFromApi(String query, final int page) {
+    public void getSearchResultFromApi(String query, final int page, DisposableSingleObserver observer) {
         if (apiCallBackInterfaces != null) {
             apiService.searchPhotosRX(
                     Constant.CLIENT_ID,
@@ -98,38 +56,7 @@ public class RandomPhotoModel implements RandomPhotoContractor.Model {
                     Constant.PAGINATION_ITEM_COUNT)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(new DisposableSingleObserver<Object>() {
-                        @Override
-                        public void onSuccess(Object o) {
-                            Gson gson = new Gson();
-                            try {
-                                String res = new Gson().toJson(o);
-                                SearchResponsePOJO searchResponsePOJO = gson.fromJson(res, SearchResponsePOJO.class);
-                                apiCallBackInterfaces.onSearchResultSuccess(searchResponsePOJO, page);
-                            } catch (Exception e) {
-                                apiCallBackInterfaces.onAPIError(null, e);
-                                e.printStackTrace();
-                            }
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            try {
-                                Gson gson = new Gson();
-                                if (e instanceof HttpException) {
-                                    ResponseBody body = ((HttpException) e).response().errorBody();
-                                    ErrorPOJO errorPOJO = gson.fromJson(body.string(), ErrorPOJO.class);
-                                    apiCallBackInterfaces.onAPIError(errorPOJO, e);
-                                } else {
-                                    apiCallBackInterfaces.onAPIError(null, e);
-                                }
-                            } catch (Exception ex) {
-                                apiCallBackInterfaces.onAPIError(null, ex);
-                                ex.printStackTrace();
-                            }
-                        }
-                    });
+                    .subscribeWith(observer);
         }
     }
 

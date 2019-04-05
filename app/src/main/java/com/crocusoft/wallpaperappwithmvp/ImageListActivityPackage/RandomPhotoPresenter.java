@@ -5,8 +5,16 @@ import com.crocusoft.wallpaperappwithmvp.pojo.ErrorPOJO;
 import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
 import com.crocusoft.wallpaperappwithmvp.pojo.SearchResponsePOJO;
 import com.crocusoft.wallpaperappwithmvp.util.Util;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.observers.DisposableSingleObserver;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, PhotoAPICallBackInterfces {
 
@@ -47,7 +55,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
         view.showProgress();
         checkInitModel();
         searchQuery = "";
-        model.getDataFromRandomApi(isNeedClear);
+        model.getDataFromRandomApi(new RandomPhotoSingleObserver(isNeedClear));
         pageForSearchAPIPagination = 1;
     }
 
@@ -58,7 +66,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
         }
         checkInitModel();
         searchQuery = query;
-        model.getSearchResultFromApi(query, pageForSearchAPIPagination);
+        model.getSearchResultFromApi(query, pageForSearchAPIPagination, new SearchPhotoObserver(pageForSearchAPIPagination));
     }
 
     @Override
@@ -124,7 +132,98 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
         }
         if (searchQuery.length() > 0) {
             checkInitModel();
-            model.getSearchResultFromApi(searchQuery, pageForSearchAPIPagination);
+            model.getSearchResultFromApi(searchQuery, pageForSearchAPIPagination, new SearchPhotoObserver(pageForSearchAPIPagination));
+        }
+    }
+
+    private class RandomPhotoSingleObserver extends DisposableSingleObserver<Object> {
+
+        private boolean isNeedClear;
+
+        public RandomPhotoSingleObserver(boolean isNeedClear) {
+            this.isNeedClear = isNeedClear;
+        }
+
+        @Override
+        public void onSuccess(Object o) {
+            Gson gson = new Gson();
+            try {
+                String res = new Gson().toJson(o);
+                List<PhotoPOJO> photoPOJOS = gson.fromJson(res,
+                        new TypeToken<List<PhotoPOJO>>() {
+                        }.getType());
+                onRandomApiSuccess(photoPOJOS, isNeedClear);
+            } catch (Exception e) {
+                onAPIError(null, e);
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            try {
+                Gson gson = new Gson();
+                if (e instanceof HttpException) {
+                    Response response = ((HttpException) e).response();
+                    ResponseBody body = response.errorBody();
+                    if (response.code() == 403) {
+                        ErrorPOJO errorPOJO = new ErrorPOJO();
+                        List<String> errors = new ArrayList<>();
+                        errors.add(response.errorBody().string());
+                        errorPOJO.setErrors(errors);
+                        onAPIError(errorPOJO, e);
+                    } else {
+                        ErrorPOJO errorPOJO = gson.fromJson(body.string(), ErrorPOJO.class);
+                        onAPIError(errorPOJO, e);
+                    }
+                } else {
+                    onAPIError(null, e);
+                }
+            } catch (Exception ex) {
+                onAPIError(null, ex);
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private class SearchPhotoObserver extends DisposableSingleObserver<Object> {
+
+        private int page;
+
+        public SearchPhotoObserver(int page) {
+            this.page = page;
+        }
+
+        @Override
+        public void onSuccess(Object o) {
+            Gson gson = new Gson();
+            try {
+                String res = new Gson().toJson(o);
+                SearchResponsePOJO searchResponsePOJO = gson.fromJson(res, SearchResponsePOJO.class);
+                onSearchResultSuccess(searchResponsePOJO, page);
+            } catch (Exception e) {
+                onAPIError(null, e);
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            try {
+                Gson gson = new Gson();
+                if (e instanceof HttpException) {
+                    ResponseBody body = ((HttpException) e).response().errorBody();
+                    ErrorPOJO errorPOJO = gson.fromJson(body.string(), ErrorPOJO.class);
+                    onAPIError(errorPOJO, e);
+                } else {
+                    onAPIError(null, e);
+                }
+            } catch (Exception ex) {
+                onAPIError(null, ex);
+                ex.printStackTrace();
+            }
         }
     }
 

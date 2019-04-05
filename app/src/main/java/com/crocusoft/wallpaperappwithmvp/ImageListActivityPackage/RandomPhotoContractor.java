@@ -7,6 +7,8 @@ import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
 
 import java.util.List;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 public interface RandomPhotoContractor {
 
     interface View extends BaseView<Presenter> {
@@ -34,9 +36,9 @@ public interface RandomPhotoContractor {
 
     interface Model {
 
-        void getDataFromRandomApi(boolean isNeedClear);
+        void getDataFromRandomApi(DisposableSingleObserver observer);
 
-        void getSearchResultFromApi(String query, int page);
+        void getSearchResultFromApi(String query, int page,DisposableSingleObserver observer);
 
     }
 
