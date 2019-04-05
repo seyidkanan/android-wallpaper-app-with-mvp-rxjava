@@ -2,7 +2,7 @@ package com.crocusoft.wallpaperappwithmvp.ImageDescriptionActivityPackage;
 
 
 import com.crocusoft.wallpaperappwithmvp.R;
-import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
+import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
 import com.crocusoft.wallpaperappwithmvp.util.Constant;
 
 public class ImageDescriptionPresenter implements ImageDescriptionContractor.Presenter {

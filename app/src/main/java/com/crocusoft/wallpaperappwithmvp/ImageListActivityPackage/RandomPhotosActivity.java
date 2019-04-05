@@ -15,16 +15,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.crocusoft.wallpaperappwithmvp.ImageDescriptionActivityPackage.ImageDescriptionActivity;
 import com.crocusoft.wallpaperappwithmvp.R;
-import com.crocusoft.wallpaperappwithmvp.pojo.ImageTechnicalInfoPOJO;
-import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
+import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
 import com.crocusoft.wallpaperappwithmvp.util.Constant;
 import com.crocusoft.wallpaperappwithmvp.util.EndlessScrollListener;
 import com.crocusoft.wallpaperappwithmvp.util.Util;

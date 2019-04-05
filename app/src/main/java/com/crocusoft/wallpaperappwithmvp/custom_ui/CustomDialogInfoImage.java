@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.crocusoft.wallpaperappwithmvp.R;
-import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
+import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
 import com.crocusoft.wallpaperappwithmvp.util.Util;
 
 

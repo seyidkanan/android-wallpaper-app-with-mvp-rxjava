@@ -1,6 +1,4 @@
-package com.crocusoft.wallpaperappwithmvp.pojo;
-
-import android.content.Intent;
+package com.crocusoft.wallpaperappwithmvp.pojo.response;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,9 +1,7 @@
 package com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage;
 
-import android.content.Context;
-
 import com.crocusoft.wallpaperappwithmvp.BaseView;
-import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
+import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
 
 import java.util.List;
 

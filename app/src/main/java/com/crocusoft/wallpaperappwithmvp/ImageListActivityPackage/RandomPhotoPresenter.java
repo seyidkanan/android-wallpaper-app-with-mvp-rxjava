@@ -1,9 +1,9 @@
 package com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage;
 
 import com.crocusoft.wallpaperappwithmvp.R;
-import com.crocusoft.wallpaperappwithmvp.pojo.ErrorPOJO;
-import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
-import com.crocusoft.wallpaperappwithmvp.pojo.SearchResponsePOJO;
+import com.crocusoft.wallpaperappwithmvp.pojo.response.ErrorPOJO;
+import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
+import com.crocusoft.wallpaperappwithmvp.pojo.response.SearchResponsePOJO;
 import com.crocusoft.wallpaperappwithmvp.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -20,7 +20,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
 
     private RandomPhotoContractor.View view;
 
-    private RandomPhotoModel model;
+    private RandomPhotoInteractor interactor;
 
     private int pageForSearchAPIPagination = 1;
 
@@ -35,8 +35,8 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
     }
 
     private void checkInitModel() {
-        if (model == null) {
-            model = new RandomPhotoModel(this);
+        if (interactor == null) {
+            interactor = new RandomPhotoInteractor(this);
         }
     }
 
@@ -55,7 +55,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
         view.showProgress();
         checkInitModel();
         searchQuery = "";
-        model.getDataFromRandomApi(new RandomPhotoSingleObserver(isNeedClear));
+        interactor.getDataFromRandomApi(new RandomPhotoSingleObserver(isNeedClear));
         pageForSearchAPIPagination = 1;
     }
 
@@ -66,7 +66,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
         }
         checkInitModel();
         searchQuery = query;
-        model.getSearchResultFromApi(query, pageForSearchAPIPagination, new SearchPhotoObserver(pageForSearchAPIPagination));
+        interactor.getSearchResultFromApi(query, pageForSearchAPIPagination, new SearchPhotoObserver(pageForSearchAPIPagination));
     }
 
     @Override
@@ -132,7 +132,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
         }
         if (searchQuery.length() > 0) {
             checkInitModel();
-            model.getSearchResultFromApi(searchQuery, pageForSearchAPIPagination, new SearchPhotoObserver(pageForSearchAPIPagination));
+            interactor.getSearchResultFromApi(searchQuery, pageForSearchAPIPagination, new SearchPhotoObserver(pageForSearchAPIPagination));
         }
     }
 

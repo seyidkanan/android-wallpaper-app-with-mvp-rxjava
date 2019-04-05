@@ -1,4 +1,4 @@
-package com.crocusoft.wallpaperappwithmvp.pojo;
+package com.crocusoft.wallpaperappwithmvp.pojo.response;
 
 import java.io.Serializable;
 

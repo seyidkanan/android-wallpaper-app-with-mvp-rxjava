@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.crocusoft.wallpaperappwithmvp.R;
-import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
+import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
 
 import java.util.List;
 

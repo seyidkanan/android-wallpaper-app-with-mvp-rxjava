@@ -1,8 +1,8 @@
 package com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage;
 
-import com.crocusoft.wallpaperappwithmvp.pojo.ErrorPOJO;
-import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
-import com.crocusoft.wallpaperappwithmvp.pojo.SearchResponsePOJO;
+import com.crocusoft.wallpaperappwithmvp.pojo.response.ErrorPOJO;
+import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
+import com.crocusoft.wallpaperappwithmvp.pojo.response.SearchResponsePOJO;
 
 import java.util.List;
 

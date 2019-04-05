@@ -1,4 +1,4 @@
-package com.crocusoft.wallpaperappwithmvp.pojo;
+package com.crocusoft.wallpaperappwithmvp.pojo.response;
 
 import com.google.gson.annotations.SerializedName;
 

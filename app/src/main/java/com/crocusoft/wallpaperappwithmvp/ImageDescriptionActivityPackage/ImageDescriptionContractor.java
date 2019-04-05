@@ -1,11 +1,10 @@
 package com.crocusoft.wallpaperappwithmvp.ImageDescriptionActivityPackage;
 
-import android.app.Activity;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.crocusoft.wallpaperappwithmvp.BaseView;
-import com.crocusoft.wallpaperappwithmvp.pojo.PhotoPOJO;
+import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
 
 public interface ImageDescriptionContractor {
 
