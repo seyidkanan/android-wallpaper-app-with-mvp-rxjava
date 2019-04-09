@@ -12,12 +12,9 @@ import io.reactivex.schedulers.Schedulers;
 
 public class RandomPhotoInteractor implements RandomPhotoContractor.Model {
 
-    private PhotoAPICallBackInterfces apiCallBackInterfaces;
-
     private ApiInterfaces apiService;
 
-    public RandomPhotoInteractor(PhotoAPICallBackInterfces apiCallBackInterfaces) {
-        this.apiCallBackInterfaces = apiCallBackInterfaces;
+    public RandomPhotoInteractor() {
         apiService = ApiInitRx.getClient()
                 .create(ApiInterfaces.class);
 
@@ -25,28 +22,25 @@ public class RandomPhotoInteractor implements RandomPhotoContractor.Model {
 
     @Override
     public void getDataFromRandomApi(DisposableSingleObserver disposableSingleObserver) {
-        if (apiCallBackInterfaces != null) {
-            apiService.getRandomPhotosRX(
-                    Constant.CLIENT_ID,
-                    Constant.PAGINATION_ITEM_COUNT)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(disposableSingleObserver);
-        }
+        apiService.getRandomPhotosRX(
+                Constant.CLIENT_ID,
+                Constant.PAGINATION_ITEM_COUNT)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(disposableSingleObserver);
     }
 
     @Override
     public void getSearchResultFromApi(String query, final int page, DisposableSingleObserver observer) {
-        if (apiCallBackInterfaces != null) {
-            apiService.searchPhotosRX(
-                    Constant.CLIENT_ID,
-                    page,
-                    query,
-                    Constant.PAGINATION_ITEM_COUNT)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(observer);
-        }
+        apiService.searchPhotosRX(
+                Constant.CLIENT_ID,
+                page,
+                query,
+                Constant.PAGINATION_ITEM_COUNT)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(observer);
+
     }
 
 }

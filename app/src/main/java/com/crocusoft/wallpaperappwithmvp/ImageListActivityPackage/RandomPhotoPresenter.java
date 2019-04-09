@@ -36,7 +36,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
 
     private void checkInitModel() {
         if (interactor == null) {
-            interactor = new RandomPhotoInteractor(this);
+            interactor = new RandomPhotoInteractor();
         }
     }
 
@@ -196,11 +196,9 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
         }
 
         @Override
-        public void onSuccess(Object o) {
-            Gson gson = new Gson();
+        public void onSuccess(Object response) {
             try {
-                String res = new Gson().toJson(o);
-                SearchResponsePOJO searchResponsePOJO = gson.fromJson(res, SearchResponsePOJO.class);
+                SearchResponsePOJO searchResponsePOJO = parseToSearchResponsePOJO(response);
                 onSearchResultSuccess(searchResponsePOJO, page);
             } catch (Exception e) {
                 onAPIError(null, e);
@@ -225,6 +223,13 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
                 ex.printStackTrace();
             }
         }
+    }
+
+    private SearchResponsePOJO parseToSearchResponsePOJO(Object response) throws Exception {
+        Gson gson = new Gson();
+        String res = new Gson().toJson(response);
+        SearchResponsePOJO searchResponsePOJO = gson.fromJson(res, SearchResponsePOJO.class);
+        return searchResponsePOJO;
     }
 
 }
