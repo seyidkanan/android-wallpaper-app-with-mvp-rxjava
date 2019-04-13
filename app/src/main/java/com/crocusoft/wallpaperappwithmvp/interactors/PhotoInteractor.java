@@ -11,7 +11,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class PhotoInteractor implements RandomPhotoContractor.Interactor {
+public class PhotoInteractor {
 
     private ApiInterfaces apiService;
 
@@ -21,7 +21,6 @@ public class PhotoInteractor implements RandomPhotoContractor.Interactor {
 
     }
 
-    @Override
     public void getDataFromRandomApi(DisposableSingleObserver disposableSingleObserver) {
         apiService.getRandomPhotosRX(
                 Constant.CLIENT_ID,
@@ -31,7 +30,6 @@ public class PhotoInteractor implements RandomPhotoContractor.Interactor {
                 .subscribeWith(disposableSingleObserver);
     }
 
-    @Override
     public void getSearchResultFromApi(String query, final int page, DisposableSingleObserver observer) {
         apiService.searchPhotosRX(
                 Constant.CLIENT_ID,

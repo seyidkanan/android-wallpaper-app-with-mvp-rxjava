@@ -31,13 +31,4 @@ public interface RandomPhotoContractor {
 
     }
 
-
-    interface Interactor {
-
-        void getDataFromRandomApi(DisposableSingleObserver observer);
-
-        void getSearchResultFromApi(String query, int page, DisposableSingleObserver observer);
-
-    }
-
 }

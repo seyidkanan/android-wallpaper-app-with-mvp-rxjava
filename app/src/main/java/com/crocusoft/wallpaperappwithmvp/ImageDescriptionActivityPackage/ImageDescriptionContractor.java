@@ -33,8 +33,4 @@ public interface ImageDescriptionContractor {
         void setPhotoPojo(PhotoPOJO photoPojo);
     }
 
-    interface Model {
-
-    }
-
 }
