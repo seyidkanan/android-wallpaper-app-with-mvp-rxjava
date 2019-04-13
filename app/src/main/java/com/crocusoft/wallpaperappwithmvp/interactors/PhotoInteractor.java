@@ -1,7 +1,6 @@
 package com.crocusoft.wallpaperappwithmvp.interactors;
 
 
-import com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage.RandomPhotoContractor;
 import com.crocusoft.wallpaperappwithmvp.data.api.ApiInitRx;
 import com.crocusoft.wallpaperappwithmvp.data.api.ApiInterfaces;
 import com.crocusoft.wallpaperappwithmvp.util.Constant;
