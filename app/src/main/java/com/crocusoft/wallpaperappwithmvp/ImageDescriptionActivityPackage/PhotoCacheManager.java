@@ -29,7 +29,6 @@ public class PhotoCacheManager implements FileDowloadingIndicaterInterface {
 
     @Override
     public void onImageDownloadProgress(final long percent) {
-        Log.e("kanan", "percent=" + percent);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -56,7 +55,6 @@ public class PhotoCacheManager implements FileDowloadingIndicaterInterface {
 
     @Override
     public void onImageDownloadError(Exception e, String error) {
-        Log.e("kanan", "error==>" + error, e);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {

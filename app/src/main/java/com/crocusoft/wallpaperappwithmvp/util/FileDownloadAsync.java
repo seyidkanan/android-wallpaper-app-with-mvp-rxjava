@@ -1,9 +1,6 @@
 package com.crocusoft.wallpaperappwithmvp.util;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
-
 
 import com.crocusoft.wallpaperappwithmvp.ImageDescriptionActivityPackage.FileDowloadingIndicaterInterface;
 

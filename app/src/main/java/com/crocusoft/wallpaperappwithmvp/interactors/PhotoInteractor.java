@@ -1,6 +1,7 @@
-package com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage;
+package com.crocusoft.wallpaperappwithmvp.interactors;
 
 
+import com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage.RandomPhotoContractor;
 import com.crocusoft.wallpaperappwithmvp.data.api.ApiInitRx;
 import com.crocusoft.wallpaperappwithmvp.data.api.ApiInterfaces;
 import com.crocusoft.wallpaperappwithmvp.util.Constant;
@@ -10,11 +11,11 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class RandomPhotoInteractor implements RandomPhotoContractor.Model {
+public class PhotoInteractor implements RandomPhotoContractor.Interactor {
 
     private ApiInterfaces apiService;
 
-    public RandomPhotoInteractor() {
+    public PhotoInteractor() {
         apiService = ApiInitRx.getClient()
                 .create(ApiInterfaces.class);
 

@@ -1,6 +1,7 @@
 package com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage;
 
 import com.crocusoft.wallpaperappwithmvp.R;
+import com.crocusoft.wallpaperappwithmvp.interactors.PhotoInteractor;
 import com.crocusoft.wallpaperappwithmvp.pojo.response.ErrorPOJO;
 import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
 import com.crocusoft.wallpaperappwithmvp.pojo.response.SearchResponsePOJO;
@@ -16,11 +17,11 @@ import io.reactivex.observers.DisposableSingleObserver;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, PhotoAPICallBackInterfces {
+public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
 
     private RandomPhotoContractor.View view;
 
-    private RandomPhotoInteractor interactor;
+    private PhotoInteractor interactor;
 
     private int pageForSearchAPIPagination = 1;
 
@@ -36,7 +37,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
 
     private void checkInitModel() {
         if (interactor == null) {
-            interactor = new RandomPhotoInteractor();
+            interactor = new PhotoInteractor();
         }
     }
 
@@ -69,7 +70,6 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
         interactor.getSearchResultFromApi(query, pageForSearchAPIPagination, new SearchPhotoObserver(pageForSearchAPIPagination));
     }
 
-    @Override
     public void onRandomApiSuccess(List<PhotoPOJO> photoPOJOS, boolean isNeedClear) {
         if (view == null) {
             return;
@@ -78,7 +78,6 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
         view.onDataFetch(photoPOJOS, isNeedClear);
     }
 
-    @Override
     public void onAPIError(ErrorPOJO errorPOJO, Throwable t) {
         if (view == null) {
             return;
@@ -100,7 +99,6 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter, Ph
     }
 
 
-    @Override
     public void onSearchResultSuccess(SearchResponsePOJO searchResponsePOJO, int page) {
         if (view == null) {
             return;
