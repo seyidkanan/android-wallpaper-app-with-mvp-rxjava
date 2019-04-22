@@ -22,7 +22,7 @@ public class ImageDescriptionActivity
 
     private PhotoView imageViewPhoto;
 
-    private ImageDescriptionContractor.Presenter presenter;
+    private ImageDescriptionPresenter presenter;
 
     private ProgressBar progressBar;
 
@@ -33,10 +33,8 @@ public class ImageDescriptionActivity
 
         initViews();
 
-        new ImageDescriptionPresenter(this);
-        if (presenter != null) {
-            presenter.startShowPhoto();
-        }
+        presenter = new ImageDescriptionPresenter(this);
+        presenter.startShowPhoto();
     }
 
     private void initViews() {
@@ -104,11 +102,6 @@ public class ImageDescriptionActivity
         CustomDialogInfoImage customDialogInfoImage = new CustomDialogInfoImage(this);
         customDialogInfoImage.setData(presenter.getPhotoPojo());
         customDialogInfoImage.show();
-    }
-
-    @Override
-    public void setPresenter(ImageDescriptionContractor.Presenter presenter) {
-        this.presenter = presenter;
     }
 
     @Override

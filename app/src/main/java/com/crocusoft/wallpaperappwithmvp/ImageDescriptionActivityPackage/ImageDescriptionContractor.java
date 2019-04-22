@@ -8,7 +8,7 @@ import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
 
 public interface ImageDescriptionContractor {
 
-    interface View extends BaseView<Presenter> {
+    interface View extends BaseView {
 
         void enableImage();
 

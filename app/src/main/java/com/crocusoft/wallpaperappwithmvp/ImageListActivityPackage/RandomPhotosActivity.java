@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.crocusoft.wallpaperappwithmvp.ImageDescriptionActivityPackage.ImageDescriptionActivity;
 import com.crocusoft.wallpaperappwithmvp.R;
+import com.crocusoft.wallpaperappwithmvp.idlingResource.FetchingIdlingResource;
 import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
 import com.crocusoft.wallpaperappwithmvp.util.Constant;
 import com.crocusoft.wallpaperappwithmvp.util.EndlessScrollListener;
@@ -37,7 +38,7 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     private RandomPhotoRVAdapter randomPhotoRVAdapter;
 
-    private RandomPhotoContractor.Presenter presenter;
+    private RandomPhotoPresenter presenter;
 
     private List<PhotoPOJO> photoPOJOList;
 
@@ -47,21 +48,23 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     private TextView textViewErrorMessage;
 
+    private FetchingIdlingResource fetchingIdlingResource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photos_list_main);
 
-        new RandomPhotoPresenter(this);
+        presenter = new RandomPhotoPresenter(this);
 
-        if (presenter == null) {
-            // TODO: 3/21/19 show fail init presenter view
-            return;
-        }
         initViews();
-        presenter.fetchRandomData(false);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.fetchRandomData(false);
+    }
 
     public void onClickTryAgainButton(View view) {
 
@@ -211,8 +214,8 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
         recyclerView.setOnScrollListener(null);
     }
 
-    @Override
-    public void setPresenter(RandomPhotoContractor.Presenter presenter) {
-        this.presenter = presenter;
+    public void setFetcherListener(FetchingIdlingResource fetchingIdlingResource) {
+        this.fetchingIdlingResource = fetchingIdlingResource;
+        presenter.setFetchingIdlingResource(fetchingIdlingResource);
     }
 }

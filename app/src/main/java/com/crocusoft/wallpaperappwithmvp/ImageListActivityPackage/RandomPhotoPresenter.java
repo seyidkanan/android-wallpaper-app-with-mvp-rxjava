@@ -1,6 +1,7 @@
 package com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage;
 
 import com.crocusoft.wallpaperappwithmvp.R;
+import com.crocusoft.wallpaperappwithmvp.idlingResource.FetchingIdlingResource;
 import com.crocusoft.wallpaperappwithmvp.interactors.PhotoInteractor;
 import com.crocusoft.wallpaperappwithmvp.pojo.response.ErrorPOJO;
 import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
@@ -27,17 +28,19 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
 
     private String searchQuery = "";
 
+    private FetchingIdlingResource fetchingIdlingResource;
+
     public RandomPhotoPresenter(RandomPhotoContractor.View view) {
         if (view == null) {
             return;
         }
         this.view = view;
-        view.setPresenter(this);
     }
 
     private void checkInitModel() {
         if (interactor == null) {
             interactor = new PhotoInteractor();
+            interactor.setFetchingIdlingResource(fetchingIdlingResource);
         }
     }
 
@@ -56,6 +59,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
         view.showProgress();
         checkInitModel();
         searchQuery = "";
+
         interactor.getDataFromRandomApi(new RandomPhotoSingleObserver(isNeedClear));
         pageForSearchAPIPagination = 1;
     }
@@ -130,6 +134,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
         }
         if (searchQuery.length() > 0) {
             checkInitModel();
+            interactor.setFetchingIdlingResource(fetchingIdlingResource);
             interactor.getSearchResultFromApi(searchQuery, pageForSearchAPIPagination, new SearchPhotoObserver(pageForSearchAPIPagination));
         }
     }
@@ -202,7 +207,6 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
                 onAPIError(null, e);
                 e.printStackTrace();
             }
-
         }
 
         @Override
@@ -230,6 +234,11 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
         return searchResponsePOJO;
     }
 
+
+    public void setFetchingIdlingResource(FetchingIdlingResource fetchingIdlingResource) {
+        this.fetchingIdlingResource = fetchingIdlingResource;
+        interactor.setFetchingIdlingResource(fetchingIdlingResource);
+    }
 }
 
 

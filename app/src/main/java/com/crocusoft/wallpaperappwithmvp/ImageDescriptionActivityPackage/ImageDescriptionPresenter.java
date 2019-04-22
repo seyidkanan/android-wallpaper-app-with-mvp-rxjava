@@ -16,7 +16,6 @@ public class ImageDescriptionPresenter implements ImageDescriptionContractor.Pre
             return;
         }
         this.view = view;
-        view.setPresenter(this);
     }
 
     @Override

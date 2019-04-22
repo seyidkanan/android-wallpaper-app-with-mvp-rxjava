@@ -9,7 +9,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 
 public interface RandomPhotoContractor {
 
-    interface View extends BaseView<Presenter> {
+    interface View extends BaseView {
 
         void showSuccessMessage(String message);
 
