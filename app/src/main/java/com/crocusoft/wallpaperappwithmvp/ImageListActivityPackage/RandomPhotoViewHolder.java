@@ -9,47 +9,27 @@ import android.widget.TextView;
 
 import com.crocusoft.wallpaperappwithmvp.R;
 import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
+import com.crocusoft.wallpaperappwithmvp.util.PhotoUtil;
 import com.crocusoft.wallpaperappwithmvp.util.Util;
 
 public class RandomPhotoViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView descriptionTV, locationTV;
     private ImageView imageView;
     private View view;
 
     public RandomPhotoViewHolder(@NonNull View itemView) {
         super(itemView);
         view = itemView;
-        descriptionTV = itemView.findViewById(R.id.textView_description_of_photo);
-        locationTV = itemView.findViewById(R.id.textView_location_of_photo);
         imageView = itemView.findViewById(R.id.imageView_photo);
     }
 
     public void bind(final PhotoPOJO photoPOJO, final RVClickListener rvClickListener, Context context) {
-        if (photoPOJO.getDescription() != null) {
-            descriptionTV.setVisibility(View.VISIBLE);
-            descriptionTV.setText(photoPOJO.getDescription());
-        }
-        if (photoPOJO.getLocation() != null) {
-            if (photoPOJO.getLocation().getTitle() != null) {
-                if (photoPOJO.getLocation().getTitle().length() > 0) {
-                    locationTV.setVisibility(View.VISIBLE);
-                    locationTV.setText(photoPOJO.getLocation().getTitle());
-                }
-            }
-        }
-
         if (photoPOJO.getUrls() != null) {
             if (photoPOJO.getUrls().getSmall() != null) {
-                Util.setImageWithPicasso(context, photoPOJO.getUrls().getSmall(), imageView, false);
+                PhotoUtil.setImageWithPicasso(context, photoPOJO.getUrls().getSmall(), imageView, false);
             }
         }
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rvClickListener.onItemClick(photoPOJO);
-            }
-        });
+        view.setOnClickListener(v -> rvClickListener.onItemClick(photoPOJO));
     }
 
 }

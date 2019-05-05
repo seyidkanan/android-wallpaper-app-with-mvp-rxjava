@@ -2,6 +2,7 @@ package com.crocusoft.wallpaperappwithmvp.data.api;
 
 import com.squareup.okhttp.ResponseBody;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -37,14 +38,14 @@ public interface ApiInterfaces {
     );
 
     @GET("photos/random")
-    Single<Object> getRandomPhotosRX(
+    Observable<Object> getRandomPhotosRX(
             @Query(CLIENT_ID) String clientId,
             @Query(COUNT) int count
     );
 
 
     @GET("search/photos")
-    Single<Object> searchPhotosRX(
+    Observable<Object> searchPhotosRX(
             @Query(CLIENT_ID) String clientId,
             @Query(PAGE) int page,
             @Query(QUERY) String query,

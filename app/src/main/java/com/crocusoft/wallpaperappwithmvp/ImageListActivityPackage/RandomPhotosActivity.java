@@ -30,7 +30,7 @@ import com.crocusoft.wallpaperappwithmvp.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RandomPhotosActivity extends AppCompatActivity implements RandomPhotoContractor.View {
+public class RandomPhotosActivity extends AppCompatActivity implements RandomPhotoContractor.ScreenView {
 
     private ProgressBar progressBar;
     private RecyclerView recyclerView;

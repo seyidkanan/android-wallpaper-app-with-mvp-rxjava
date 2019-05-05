@@ -19,7 +19,7 @@ public class VisibilityMatcher extends BaseMatcher<View> {
         if (visibility == View.GONE) visibilityName = "GONE";
         else if (visibility == View.VISIBLE) visibilityName = "VISIBLE";
         else visibilityName = "INVISIBLE";
-        description.appendText("View visibility must has equals " + visibilityName);
+        description.appendText("ScreenView visibility must has equals " + visibilityName);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class VisibilityMatcher extends BaseMatcher<View> {
         }
 
         if (!(o instanceof View))
-            throw new IllegalArgumentException("Object must be instance of View. Object is instance of " + o);
+            throw new IllegalArgumentException("Object must be instance of ScreenView. Object is instance of " + o);
         return ((View) o).getVisibility() == visibility;
     }
 

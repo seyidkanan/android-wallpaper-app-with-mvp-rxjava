@@ -18,7 +18,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 
 public class ImageDescriptionActivity
         extends AppCompatActivity
-        implements ImageDescriptionContractor.View {
+        implements ImageDescriptionContractor.ScreenView {
 
     private PhotoView imageViewPhoto;
 
@@ -70,6 +70,16 @@ public class ImageDescriptionActivity
     @Override
     public void showErrorMessage(String message) {
         Util.showToast(this, message);
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
     }
 
     @Override

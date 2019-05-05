@@ -45,21 +45,18 @@ public class ApiInitRx {
                 .writeTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS);
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         httpClient.addInterceptor(interceptor);
 
-        httpClient.addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request original = chain.request();
-                Request.Builder requestBuilder = original.newBuilder()
-                        .addHeader("Accept", "application/json")
-                        .addHeader("Accept-Version", "v1")
-                        .addHeader("Content-Type", "application/json");
-                Request request = requestBuilder.build();
-                return chain.proceed(request);
-            }
+        httpClient.addInterceptor(chain -> {
+            Request original = chain.request();
+            Request.Builder requestBuilder = original.newBuilder()
+                    .addHeader("Accept", "application/json")
+                    .addHeader("Accept-Version", "v1")
+                    .addHeader("Content-Type", "application/json");
+            Request request = requestBuilder.build();
+            return chain.proceed(request);
         });
 
         okHttpClient = httpClient.build();

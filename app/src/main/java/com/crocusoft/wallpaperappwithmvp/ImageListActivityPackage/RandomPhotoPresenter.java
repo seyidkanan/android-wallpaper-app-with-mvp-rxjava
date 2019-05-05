@@ -1,26 +1,25 @@
 package com.crocusoft.wallpaperappwithmvp.ImageListActivityPackage;
 
+import com.crocusoft.wallpaperappwithmvp.BaseScreenView;
 import com.crocusoft.wallpaperappwithmvp.R;
+import com.crocusoft.wallpaperappwithmvp.data.api.BaseSubscriber;
 import com.crocusoft.wallpaperappwithmvp.idlingResource.FetchingIdlingResource;
 import com.crocusoft.wallpaperappwithmvp.interactors.PhotoInteractor;
-import com.crocusoft.wallpaperappwithmvp.pojo.response.ErrorPOJO;
 import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
 import com.crocusoft.wallpaperappwithmvp.pojo.response.SearchResponsePOJO;
+import com.crocusoft.wallpaperappwithmvp.util.HttpResponseHandlerUtil;
 import com.crocusoft.wallpaperappwithmvp.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.observers.DisposableSingleObserver;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
+import io.reactivex.disposables.Disposable;
+
 
 public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
 
-    private RandomPhotoContractor.View view;
+    private RandomPhotoContractor.ScreenView view;
 
     private PhotoInteractor interactor;
 
@@ -30,7 +29,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
 
     private FetchingIdlingResource fetchingIdlingResource;
 
-    public RandomPhotoPresenter(RandomPhotoContractor.View view) {
+    public RandomPhotoPresenter(RandomPhotoContractor.ScreenView view) {
         if (view == null) {
             return;
         }
@@ -60,7 +59,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
         checkInitModel();
         searchQuery = "";
 
-        interactor.getDataFromRandomApi(new RandomPhotoSingleObserver(isNeedClear));
+        interactor.getDataFromRandomApi(new RandomPhotoObserver(isNeedClear, view));
         pageForSearchAPIPagination = 1;
     }
 
@@ -81,27 +80,6 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
         view.hideProgress();
         view.onDataFetch(photoPOJOS, isNeedClear);
     }
-
-    public void onAPIError(ErrorPOJO errorPOJO, Throwable t) {
-        if (view == null) {
-            return;
-        }
-        view.hideProgress();
-
-        if (errorPOJO != null) {
-            StringBuilder builder = new StringBuilder();
-            for (String errorText : errorPOJO.getErrors()) {
-                builder.append(errorText).append(" ");
-            }
-            view.showErrorMessage(builder.toString());
-            return;
-        }
-
-        if (t != null) {
-            view.showErrorMessage(t.getMessage());
-        }
-    }
-
 
     public void onSearchResultSuccess(SearchResponsePOJO searchResponsePOJO, int page) {
         if (view == null) {
@@ -139,16 +117,23 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
         }
     }
 
-    private class RandomPhotoSingleObserver extends DisposableSingleObserver<Object> {
+    private class RandomPhotoObserver extends BaseSubscriber<Object> {
 
         private boolean isNeedClear;
 
-        public RandomPhotoSingleObserver(boolean isNeedClear) {
+        public RandomPhotoObserver(boolean isNeedClear, BaseScreenView view) {
+            super(view);
             this.isNeedClear = isNeedClear;
         }
 
         @Override
-        public void onSuccess(Object o) {
+        public void onSubscribe(Disposable d) {
+
+        }
+
+        @Override
+        public void onNext(Object o) {
+            super.onNext(o);
             Gson gson = new Gson();
             try {
                 String res = new Gson().toJson(o);
@@ -157,81 +142,42 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
                         }.getType());
                 onRandomApiSuccess(photoPOJOS, isNeedClear);
             } catch (Exception e) {
-                onAPIError(null, e);
+                HttpResponseHandlerUtil.onAPIError(view, null, e);
                 e.printStackTrace();
-            }
-
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            try {
-                Gson gson = new Gson();
-                if (e instanceof HttpException) {
-                    Response response = ((HttpException) e).response();
-                    ResponseBody body = response.errorBody();
-                    if (response.code() == 403) {
-                        ErrorPOJO errorPOJO = new ErrorPOJO();
-                        List<String> errors = new ArrayList<>();
-                        errors.add(response.errorBody().string());
-                        errorPOJO.setErrors(errors);
-                        onAPIError(errorPOJO, e);
-                    } else {
-                        ErrorPOJO errorPOJO = gson.fromJson(body.string(), ErrorPOJO.class);
-                        onAPIError(errorPOJO, e);
-                    }
-                } else {
-                    onAPIError(null, e);
-                }
-            } catch (Exception ex) {
-                onAPIError(null, ex);
-                ex.printStackTrace();
             }
         }
     }
 
-    private class SearchPhotoObserver extends DisposableSingleObserver<Object> {
+    private class SearchPhotoObserver extends BaseSubscriber<Object> {
 
         private int page;
 
         public SearchPhotoObserver(int page) {
+            super(view);
             this.page = page;
         }
 
         @Override
-        public void onSuccess(Object response) {
+        public void onSubscribe(Disposable d) {
+
+        }
+
+        @Override
+        public void onNext(Object response) {
             try {
                 SearchResponsePOJO searchResponsePOJO = parseToSearchResponsePOJO(response);
                 onSearchResultSuccess(searchResponsePOJO, page);
             } catch (Exception e) {
-                onAPIError(null, e);
+                HttpResponseHandlerUtil.onAPIError(view, null, e);
                 e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            try {
-                Gson gson = new Gson();
-                if (e instanceof HttpException) {
-                    ResponseBody body = ((HttpException) e).response().errorBody();
-                    ErrorPOJO errorPOJO = gson.fromJson(body.string(), ErrorPOJO.class);
-                    onAPIError(errorPOJO, e);
-                } else {
-                    onAPIError(null, e);
-                }
-            } catch (Exception ex) {
-                onAPIError(null, ex);
-                ex.printStackTrace();
             }
         }
     }
 
-    private SearchResponsePOJO parseToSearchResponsePOJO(Object response) throws Exception {
+    private SearchResponsePOJO parseToSearchResponsePOJO(Object response) {
         Gson gson = new Gson();
         String res = new Gson().toJson(response);
-        SearchResponsePOJO searchResponsePOJO = gson.fromJson(res, SearchResponsePOJO.class);
-        return searchResponsePOJO;
+        return gson.fromJson(res, SearchResponsePOJO.class);
     }
 
 

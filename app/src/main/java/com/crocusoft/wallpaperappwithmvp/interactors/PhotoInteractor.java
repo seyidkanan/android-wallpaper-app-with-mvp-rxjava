@@ -6,6 +6,10 @@ import com.crocusoft.wallpaperappwithmvp.data.api.ApiInterfaces;
 import com.crocusoft.wallpaperappwithmvp.idlingResource.FetchingIdlingResource;
 import com.crocusoft.wallpaperappwithmvp.util.Constant;
 
+import org.reactivestreams.Subscriber;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
@@ -14,7 +18,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class PhotoInteractor {
+public class PhotoInteractor extends BaseInteractor {
 
     private ApiInterfaces apiService;
 
@@ -30,53 +34,33 @@ public class PhotoInteractor {
         this.fetchingIdlingResource = fetchingIdlingResource;
     }
 
-    public void getDataFromRandomApi(DisposableSingleObserver disposableSingleObserver) {
-        apiService.getRandomPhotosRX(
-                Constant.CLIENT_ID,
-                Constant.PAGINATION_ITEM_COUNT)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        if (fetchingIdlingResource != null) {
-                            fetchingIdlingResource.beginFetching();
-                        }
+    public void getDataFromRandomApi(Observer<Object> observer) {
+        apiService.getRandomPhotosRX(Constant.CLIENT_ID, Constant.PAGINATION_ITEM_COUNT)
+                .compose(baseCall())
+                .doOnSubscribe(disposable -> {
+                    if (fetchingIdlingResource != null) {
+                        fetchingIdlingResource.beginFetching();
                     }
                 })
-                .doFinally(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        if (fetchingIdlingResource != null) {
-                            fetchingIdlingResource.doneFetching();
-                        }
+                .doFinally(() -> {
+                    if (fetchingIdlingResource != null) {
+                        fetchingIdlingResource.doneFetching();
                     }
                 })
-                .subscribe(disposableSingleObserver);
+                .subscribe(observer);
     }
 
-    public void getSearchResultFromApi(String query, final int page, DisposableSingleObserver observer) {
-        apiService.searchPhotosRX(
-                Constant.CLIENT_ID,
-                page,
-                query,
-                Constant.PAGINATION_ITEM_COUNT)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        if (fetchingIdlingResource != null) {
-                            fetchingIdlingResource.beginFetching();
-                        }
+    public void getSearchResultFromApi(String query, final int page, Observer<Object> observer) {
+        apiService.searchPhotosRX(Constant.CLIENT_ID, page, query, Constant.PAGINATION_ITEM_COUNT)
+                .compose(baseCall())
+                .doOnSubscribe(disposable -> {
+                    if (fetchingIdlingResource != null) {
+                        fetchingIdlingResource.beginFetching();
                     }
                 })
-                .doFinally(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        if (fetchingIdlingResource != null) {
-                            fetchingIdlingResource.doneFetching();
-                        }
+                .doFinally(() -> {
+                    if (fetchingIdlingResource != null) {
+                        fetchingIdlingResource.doneFetching();
                     }
                 })
                 .subscribe(observer);

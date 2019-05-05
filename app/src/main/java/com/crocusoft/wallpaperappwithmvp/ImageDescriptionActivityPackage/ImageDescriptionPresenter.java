@@ -7,11 +7,11 @@ import com.crocusoft.wallpaperappwithmvp.util.Constant;
 
 public class ImageDescriptionPresenter implements ImageDescriptionContractor.Presenter {
 
-    private ImageDescriptionContractor.View view;
+    private ImageDescriptionContractor.ScreenView view;
 
     private PhotoPOJO photoPOJO;
 
-    public ImageDescriptionPresenter(ImageDescriptionContractor.View view) {
+    public ImageDescriptionPresenter(ImageDescriptionContractor.ScreenView view) {
         if (view == null) {
             return;
         }
