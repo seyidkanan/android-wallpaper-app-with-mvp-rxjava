@@ -52,7 +52,7 @@ public class PhotoInteractor {
                         }
                     }
                 })
-                .subscribeWith(disposableSingleObserver);
+                .subscribe(disposableSingleObserver);
     }
 
     public void getSearchResultFromApi(String query, final int page, DisposableSingleObserver observer) {
@@ -79,7 +79,7 @@ public class PhotoInteractor {
                         }
                     }
                 })
-                .subscribeWith(observer);
+                .subscribe(observer);
 
     }
 
