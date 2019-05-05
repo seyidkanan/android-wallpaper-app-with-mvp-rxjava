@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface RandomPhotoContractor {
 
-    interface ScreenView extends BaseScreenView {
+    interface View extends BaseScreenView {
 
         void showSuccessMessage(String message);
 

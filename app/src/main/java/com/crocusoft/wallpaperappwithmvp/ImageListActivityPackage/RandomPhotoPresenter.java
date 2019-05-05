@@ -7,10 +7,9 @@ import com.crocusoft.wallpaperappwithmvp.idlingResource.FetchingIdlingResource;
 import com.crocusoft.wallpaperappwithmvp.interactors.PhotoInteractor;
 import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
 import com.crocusoft.wallpaperappwithmvp.pojo.response.SearchResponsePOJO;
+import com.crocusoft.wallpaperappwithmvp.util.DataConverterUtil;
 import com.crocusoft.wallpaperappwithmvp.util.HttpResponseHandlerUtil;
 import com.crocusoft.wallpaperappwithmvp.util.Util;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ import io.reactivex.disposables.Disposable;
 
 public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
 
-    private RandomPhotoContractor.ScreenView view;
+    private RandomPhotoContractor.View view;
 
     private PhotoInteractor interactor;
 
@@ -29,7 +28,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
 
     private FetchingIdlingResource fetchingIdlingResource;
 
-    public RandomPhotoPresenter(RandomPhotoContractor.ScreenView view) {
+    public RandomPhotoPresenter(RandomPhotoContractor.View view) {
         if (view == null) {
             return;
         }
@@ -39,7 +38,9 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
     private void checkInitModel() {
         if (interactor == null) {
             interactor = new PhotoInteractor();
-            interactor.setFetchingIdlingResource(fetchingIdlingResource);
+            if (fetchingIdlingResource != null) {
+                interactor.setFetchingIdlingResource(fetchingIdlingResource);
+            }
         }
     }
 
@@ -50,10 +51,10 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
             return;
         }
 
-        if (!Util.isConnected(view.getContext())) {
-            view.showErrorView(view.getContext().getString(R.string.no_internet_connection));
-            return;
-        }
+//        if (!Util.isConnected(view.getContext())) {
+//            view.showErrorView(view.getContext().getString(R.string.no_internet_connection));
+//            return;
+//        }
 
         view.showProgress();
         checkInitModel();
@@ -77,7 +78,6 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
         if (view == null) {
             return;
         }
-        view.hideProgress();
         view.onDataFetch(photoPOJOS, isNeedClear);
     }
 
@@ -134,13 +134,8 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
         @Override
         public void onNext(Object o) {
             super.onNext(o);
-            Gson gson = new Gson();
             try {
-                String res = new Gson().toJson(o);
-                List<PhotoPOJO> photoPOJOS = gson.fromJson(res,
-                        new TypeToken<List<PhotoPOJO>>() {
-                        }.getType());
-                onRandomApiSuccess(photoPOJOS, isNeedClear);
+                onRandomApiSuccess(DataConverterUtil.parseSuccessResponse(o), isNeedClear);
             } catch (Exception e) {
                 HttpResponseHandlerUtil.onAPIError(view, null, e);
                 e.printStackTrace();
@@ -165,19 +160,12 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
         @Override
         public void onNext(Object response) {
             try {
-                SearchResponsePOJO searchResponsePOJO = parseToSearchResponsePOJO(response);
-                onSearchResultSuccess(searchResponsePOJO, page);
+                onSearchResultSuccess(DataConverterUtil.parseToSearchResponsePOJO(response), page);
             } catch (Exception e) {
                 HttpResponseHandlerUtil.onAPIError(view, null, e);
                 e.printStackTrace();
             }
         }
-    }
-
-    private SearchResponsePOJO parseToSearchResponsePOJO(Object response) {
-        Gson gson = new Gson();
-        String res = new Gson().toJson(response);
-        return gson.fromJson(res, SearchResponsePOJO.class);
     }
 
 

@@ -9,21 +9,29 @@ public class HttpResponseHandlerUtil {
         if (view == null) {
             return;
         }
-        view.hideProgress();
 
         if (errorPOJO != null) {
-            StringBuilder builder = new StringBuilder();
-            for (String errorText : errorPOJO.getErrors()) {
-                builder.append(errorText).append(" ");
-            }
-            view.showErrorMessage(builder.toString());
+            handleErrorWithApiMessage(view, errorPOJO);
             return;
         }
 
+        if (t != null) {
+            handleThrowableError(view, t);
+        }
+    }
+
+    private static void handleThrowableError(BaseScreenView view, Throwable t) {
         if (t != null) {
             view.showErrorMessage(t.getMessage());
         }
     }
 
+    private static void handleErrorWithApiMessage(BaseScreenView view, ErrorPOJO errorPOJO) {
+        StringBuilder builder = new StringBuilder();
+        for (String errorText : errorPOJO.getErrors()) {
+            builder.append(errorText).append(" ");
+        }
+        view.showErrorMessage(builder.toString());
+    }
 
 }

@@ -12,7 +12,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -30,7 +29,7 @@ import com.crocusoft.wallpaperappwithmvp.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RandomPhotosActivity extends AppCompatActivity implements RandomPhotoContractor.ScreenView {
+public class RandomPhotosActivity extends AppCompatActivity implements RandomPhotoContractor.View {
 
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
@@ -66,7 +65,7 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
         presenter.fetchRandomData(false);
     }
 
-    public void onClickTryAgainButton(View view) {
+    public void onClickTryAgainButton(android.view.View view) {
 
     }
 
@@ -101,7 +100,7 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
     }
 
     private void hideKeyboard() {
-        View view = this.getCurrentFocus();
+        android.view.View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -164,8 +163,8 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     @Override
     public void showErrorView(String message) {
-        constraintLayoutErrorView.setVisibility(View.VISIBLE);
-        constraintLayoutDataContainer.setVisibility(View.GONE);
+        constraintLayoutErrorView.setVisibility(android.view.View.VISIBLE);
+        constraintLayoutDataContainer.setVisibility(android.view.View.GONE);
 
         textViewErrorMessage.setText(message);
     }
@@ -182,24 +181,24 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     @Override
     public void showProgress() {
-        constraintLayoutErrorView.setVisibility(View.GONE);
-        constraintLayoutDataContainer.setVisibility(View.VISIBLE);
+        constraintLayoutErrorView.setVisibility(android.view.View.GONE);
+        constraintLayoutDataContainer.setVisibility(android.view.View.VISIBLE);
 
-        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(android.view.View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-        constraintLayoutErrorView.setVisibility(View.GONE);
-        constraintLayoutDataContainer.setVisibility(View.VISIBLE);
+        constraintLayoutErrorView.setVisibility(android.view.View.GONE);
+        constraintLayoutDataContainer.setVisibility(android.view.View.VISIBLE);
 
-        progressBar.setVisibility(View.GONE);
+        progressBar.setVisibility(android.view.View.GONE);
     }
 
     @Override
     public void onDataFetch(List<PhotoPOJO> photoPOJOS, boolean isNeedClear) {
-        constraintLayoutErrorView.setVisibility(View.GONE);
-        constraintLayoutDataContainer.setVisibility(View.VISIBLE);
+        constraintLayoutErrorView.setVisibility(android.view.View.GONE);
+        constraintLayoutDataContainer.setVisibility(android.view.View.VISIBLE);
 
         unPlugRVListener();
         if (isNeedClear) {
