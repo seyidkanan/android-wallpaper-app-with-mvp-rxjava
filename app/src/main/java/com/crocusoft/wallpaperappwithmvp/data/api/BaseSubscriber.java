@@ -42,7 +42,7 @@ public abstract class BaseSubscriber<R extends Object> implements Subscriber<R>,
         if (view == null) {
             return;
         }
-
+        view.hideProgress();
         try {
             Gson gson = new Gson();
             if (e instanceof HttpException) {
