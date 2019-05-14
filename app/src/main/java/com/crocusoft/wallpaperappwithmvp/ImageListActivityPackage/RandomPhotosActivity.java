@@ -32,32 +32,42 @@ import com.crocusoft.wallpaperappwithmvp.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class RandomPhotosActivity extends AppCompatActivity implements RandomPhotoContractor.View {
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
 
-    private ProgressBar progressBar;
-    private RecyclerView recyclerView;
     private GridLayoutManager gridLayoutManager;
-
     private RandomPhotoRVAdapter randomPhotoRVAdapter;
-
     private RandomPhotoPresenter presenter;
-
     private List<PhotoPOJO> photoPOJOList;
 
-    private EditText editTextSearch;
+    @BindView(R.id.editTextSearch)
+    EditText editTextSearch;
 
-    private ConstraintLayout constraintLayoutErrorView, constraintLayoutDataContainer;
+    @BindView(R.id.constraintLayoutErrorView)
+    ConstraintLayout constraintLayoutErrorView;
 
-    private TextView textViewErrorMessage;
+    @BindView(R.id.constraintLayoutDataContainer)
+    ConstraintLayout constraintLayoutDataContainer;
+
+    @BindView(R.id.textViewErrorMessage)
+    TextView textViewErrorMessage;
 
     private FetchingIdlingResource fetchingIdlingResource;
 
+    @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photos_list_main);
+        ButterKnife.bind(this);
 
         presenter = new RandomPhotoPresenter(this);
 
@@ -75,30 +85,20 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
     }
 
     private void initViews() {
-        progressBar = findViewById(R.id.progressBar);
-        recyclerView = findViewById(R.id.recyclerView);
-        editTextSearch = findViewById(R.id.editTextSearch);
-        textViewErrorMessage = findViewById(R.id.textViewErrorMessage);
-        constraintLayoutDataContainer = findViewById(R.id.constraintLayoutDataContainer);
-        constraintLayoutErrorView = findViewById(R.id.constraintLayoutErrorView);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        editTextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (editTextSearch.getText().toString().trim().length() > 0) {
-                        presenter.searchTextEntered(editTextSearch.getText().toString());
-                    } else {
-                        presenter.fetchRandomData(true);
-                    }
-                    hideKeyboard();
-                    return true;
+        editTextSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (editTextSearch.getText().toString().trim().length() > 0) {
+                    presenter.searchTextEntered(editTextSearch.getText().toString());
+                } else {
+                    presenter.fetchRandomData(true);
                 }
-                return false;
+                hideKeyboard();
+                return true;
             }
+            return false;
         });
 
         initSwipeRefreshLayout();
@@ -107,7 +107,6 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
     }
 
     private void initSwipeRefreshLayout() {
-        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setColorSchemeColors(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null));
         swipeRefreshLayout.setOnRefreshListener(() -> {
             swipeRefreshLayout.setRefreshing(true);

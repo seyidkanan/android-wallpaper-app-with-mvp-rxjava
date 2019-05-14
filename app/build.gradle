@@ -74,6 +74,10 @@ dependencies {
 
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
 
+    def butterknifeVersion = '8.6.0'
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    implementation "com.jakewharton:butterknife:$butterknifeVersion"
+
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.6.8'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
