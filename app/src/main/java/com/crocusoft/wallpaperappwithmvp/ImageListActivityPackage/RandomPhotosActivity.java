@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -48,6 +51,8 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
     private TextView textViewErrorMessage;
 
     private FetchingIdlingResource fetchingIdlingResource;
+
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +101,18 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
             }
         });
 
+        initSwipeRefreshLayout();
+
         initRV();
+    }
+
+    private void initSwipeRefreshLayout() {
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setColorSchemeColors(ResourcesCompat.getColor(getResources(), R.color.colorAccent, null));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            swipeRefreshLayout.setRefreshing(true);
+            presenter.fetchRandomData(true);
+        });
     }
 
     private void hideKeyboard() {
@@ -111,13 +127,10 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
         gridLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
         photoPOJOList = new ArrayList<>();
-        randomPhotoRVAdapter = new RandomPhotoRVAdapter(photoPOJOList, this, new RVClickListener() {
-            @Override
-            public void onItemClick(PhotoPOJO photoPOJO) {
-                Intent intent = new Intent(RandomPhotosActivity.this, ImageDescriptionActivity.class);
-                intent.putExtra(Constant.BUNDLE_PHOTO_DATA, photoPOJO);
-                startActivity(intent);
-            }
+        randomPhotoRVAdapter = new RandomPhotoRVAdapter(photoPOJOList, this, photoPOJO -> {
+            Intent intent = new Intent(RandomPhotosActivity.this, ImageDescriptionActivity.class);
+            intent.putExtra(Constant.BUNDLE_PHOTO_DATA, photoPOJO);
+            startActivity(intent);
         });
 
         initRVScrollListener();
@@ -197,6 +210,7 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     @Override
     public void onDataFetch(List<PhotoPOJO> photoPOJOS, boolean isNeedClear) {
+        swipeRefreshLayout.setRefreshing(false);
         constraintLayoutErrorView.setVisibility(android.view.View.GONE);
         constraintLayoutDataContainer.setVisibility(android.view.View.VISIBLE);
 
