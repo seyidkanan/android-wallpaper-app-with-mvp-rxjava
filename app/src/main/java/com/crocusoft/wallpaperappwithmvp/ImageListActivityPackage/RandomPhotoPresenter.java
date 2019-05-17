@@ -117,7 +117,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
         }
     }
 
-    private class RandomPhotoObserver extends BaseSubscriber<Object> {
+    public class RandomPhotoObserver extends BaseSubscriber<Object> {
 
         private boolean isNeedClear;
 
@@ -172,6 +172,10 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
     public void setFetchingIdlingResource(FetchingIdlingResource fetchingIdlingResource) {
         this.fetchingIdlingResource = fetchingIdlingResource;
         interactor.setFetchingIdlingResource(fetchingIdlingResource);
+    }
+
+    public void setPhotoInteractor(PhotoInteractor interactor) {
+        this.interactor = interactor;
     }
 }
 
