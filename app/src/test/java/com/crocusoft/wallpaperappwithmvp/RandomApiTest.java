@@ -34,7 +34,9 @@ import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -59,6 +61,7 @@ public class RandomApiTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        presenter.setPhotoInteractor(photoInteractor);
     }
 
     @Test
@@ -66,7 +69,6 @@ public class RandomApiTest {
         List<PhotoPOJO> photoPOJOS = new ArrayList<>();
         Object o = photoPOJOS;
 
-        presenter.setPhotoInteractor(photoInteractor);
         presenter.fetchRandomData(true);
 
         verify(view).showProgress();
@@ -76,8 +78,27 @@ public class RandomApiTest {
 
         response.onNext(o);
         response.onComplete();
-        verify(view).hideProgress();
-        verify(view).onDataFetch(any(), anyBoolean());
+
+        InOrder inOrder = inOrder(view);
+        inOrder.verify(view).onDataFetch(any(), anyBoolean());
+        inOrder.verify(view).hideProgress();
+    }
+
+    @Test
+    public void testRandomApi_Mock_resultFailedFlow() {
+        presenter.fetchRandomData(true);
+
+        verify(view).showProgress();
+        verify(photoInteractor).getDataFromRandomApi(photoObserver.capture());
+
+        RandomPhotoPresenter.RandomPhotoObserver response = photoObserver.getValue();
+
+        response.onError(new Throwable("mock exception"));
+
+        InOrder inOrder = inOrder(view);
+        inOrder.verify(view).hideProgress();
+        inOrder.verify(view, never()).onDataFetch(any(), anyBoolean());
+        inOrder.verify(view).showErrorMessage(anyString());
     }
 
 }
