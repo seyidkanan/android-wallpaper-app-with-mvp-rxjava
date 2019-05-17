@@ -143,7 +143,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
         }
     }
 
-    private class SearchPhotoObserver extends BaseSubscriber<Object> {
+    public class SearchPhotoObserver extends BaseSubscriber<Object> {
 
         private int page;
 
