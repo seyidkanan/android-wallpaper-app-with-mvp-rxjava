@@ -6,6 +6,8 @@ import com.crocusoft.wallpaperappwithmvp.interactors.PhotoInteractor;
 import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
 import com.crocusoft.wallpaperappwithmvp.pojo.response.SearchResponsePOJO;
 
+import net.bytebuddy.description.method.ParameterList;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -55,7 +57,9 @@ public class SearchApiMockTest {
         RandomPhotoPresenter.SearchPhotoObserver response = photoObserver.getValue();
 
         SearchResponsePOJO searchResponsePOJO = new SearchResponsePOJO();
-        searchResponsePOJO.setResults(new ArrayList<>());
+        List<PhotoPOJO> photoPOJOS  = new ArrayList<>();
+        photoPOJOS.add(new PhotoPOJO());
+        searchResponsePOJO.setResults(photoPOJOS);
         Object o = searchResponsePOJO;
 
         response.onNext(o);
