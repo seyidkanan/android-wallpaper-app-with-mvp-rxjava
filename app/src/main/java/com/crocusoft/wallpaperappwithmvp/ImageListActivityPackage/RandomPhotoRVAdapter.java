@@ -33,7 +33,7 @@ public class RandomPhotoRVAdapter extends RecyclerView.Adapter<RandomPhotoViewHo
 
     @Override
     public void onBindViewHolder(@NonNull RandomPhotoViewHolder randomPhotoViewHolder, int i) {
-        randomPhotoViewHolder.bind(photoPOJOS.get(i), rvClickListener,context);
+        randomPhotoViewHolder.bind(photoPOJOS.get(i), rvClickListener, context);
     }
 
     @Override

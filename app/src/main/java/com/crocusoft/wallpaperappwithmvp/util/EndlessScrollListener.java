@@ -2,6 +2,7 @@ package com.crocusoft.wallpaperappwithmvp.util;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 
 /**
  * Created by seyidkanan on 3/13/18.
@@ -14,14 +15,14 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
     private int mPreviousTotal = 0;
     private boolean mLoading = true;
     private int mCurrentPage = 0;
-    private GridLayoutManager mLinearLayoutManager;
+    private StaggeredGridLayoutManager mLinearLayoutManager;
 
     private static final int HIDE_THRESHOLD = 10;
 
     private int mScrolledDistance = 0;
     private boolean mControlsVisible = true;
 
-    public EndlessScrollListener(GridLayoutManager linearLayoutManager) {
+    public EndlessScrollListener(StaggeredGridLayoutManager linearLayoutManager) {
         this.mLinearLayoutManager = linearLayoutManager;
     }
 
@@ -43,10 +44,16 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
 
         int visibleItemCount = recyclerView.getChildCount();
         int totalItemCount = mLinearLayoutManager.getItemCount();
-        int firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
+//        int firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
+
+        int[] firstVisibleItems = mLinearLayoutManager.findFirstVisibleItemPositions(null);
+        int firstVisibleItem = 0;
+        if (firstVisibleItems != null && firstVisibleItems.length > 0) {
+            firstVisibleItem = firstVisibleItems[0];
+        }
 
         if (firstVisibleItem == 0) {
-            if(!mControlsVisible) {
+            if (!mControlsVisible) {
                 onScrollUp();
                 mControlsVisible = true;
             }
@@ -61,7 +68,7 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
                 mScrolledDistance = 0;
             }
         }
-        if((mControlsVisible && dy>0) || (!mControlsVisible && dy<0)) {
+        if ((mControlsVisible && dy > 0) || (!mControlsVisible && dy < 0)) {
             mScrolledDistance += dy;
         }
 

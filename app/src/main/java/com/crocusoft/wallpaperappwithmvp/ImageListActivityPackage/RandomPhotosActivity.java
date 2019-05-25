@@ -4,17 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -41,7 +38,7 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    private GridLayoutManager gridLayoutManager;
+    private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private RandomPhotoRVAdapter randomPhotoRVAdapter;
     private RandomPhotoPresenter presenter;
     private List<PhotoPOJO> photoPOJOList;
@@ -57,8 +54,6 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     @BindView(R.id.textViewErrorMessage)
     TextView textViewErrorMessage;
-
-    private FetchingIdlingResource fetchingIdlingResource;
 
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -123,8 +118,9 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
     }
 
     private void initRV() {
-        gridLayoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2,
+                StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(staggeredGridLayoutManager);
         photoPOJOList = new ArrayList<>();
         randomPhotoRVAdapter = new RandomPhotoRVAdapter(photoPOJOList, this, photoPOJO -> {
             Intent intent = new Intent(RandomPhotosActivity.this, ImageDescriptionActivity.class);
@@ -134,13 +130,13 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
         initRVScrollListener();
 
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+//        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(randomPhotoRVAdapter);
     }
 
     private void initRVScrollListener() {
-        recyclerView.setOnScrollListener(new EndlessScrollListener(gridLayoutManager) {
+        recyclerView.setOnScrollListener(new EndlessScrollListener(staggeredGridLayoutManager) {
             @Override
             public void onLoadMore(int currentPage) {
                 if (editTextSearch.getText().toString().trim().length() > 0) {
@@ -227,7 +223,6 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
     }
 
     public void setFetcherListener(FetchingIdlingResource fetchingIdlingResource) {
-        this.fetchingIdlingResource = fetchingIdlingResource;
         presenter.setFetchingIdlingResource(fetchingIdlingResource);
     }
 }
