@@ -1,44 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/color_black"
-    tools:context=".ImageDescriptionActivityPackage.ImageDescriptionActivity">
+    android:layout_height="match_parent">
 
-
-    <include
-        android:id="@+id/toolbar_image_description"
-        layout="@layout/toolbar_transparent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.github.chrisbanes.photoview.PhotoView
-        android:id="@+id/imageViewPhoto"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_image_description"
-        app:layout_constraintVertical_bias="0.50"
-        tools:src="@tools:sample/backgrounds/scenic" />
+        android:background="@color/color_black"
+        tools:context=".ImageDescriptionActivityPackage.ImageDescriptionActivity">
 
-    <ProgressBar
-        android:id="@+id/progressBarCachingPercentIndicator"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:background="@drawable/circle_shape"
-        android:indeterminate="false"
-        android:max="100"
-        android:progress="0"
-        android:progressDrawable="@drawable/circular_progress_bar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageViewPhoto"
-        app:layout_constraintStart_toStartOf="@+id/imageViewPhoto"
-        app:layout_constraintTop_toTopOf="@+id/imageViewPhoto" />
 
-</android.support.constraint.ConstraintLayout>
+        <include
+            android:id="@+id/toolbar_image_description"
+            layout="@layout/toolbar_transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/imageViewPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_image_description"
+            app:layout_constraintVertical_bias="0.50" />
+
+        <ProgressBar
+            android:id="@+id/progressBarCachingPercentIndicator"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:background="@drawable/circle_shape"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/circular_progress_bar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/imageViewPhoto"
+            app:layout_constraintStart_toStartOf="@+id/imageViewPhoto"
+            app:layout_constraintTop_toTopOf="@+id/imageViewPhoto" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <include layout="@layout/bottom_sheet_info_view" />
+
+</android.support.design.widget.CoordinatorLayout>
+

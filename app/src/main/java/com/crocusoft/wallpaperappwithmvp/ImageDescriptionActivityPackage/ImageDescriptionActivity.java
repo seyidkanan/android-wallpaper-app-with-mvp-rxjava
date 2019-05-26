@@ -41,7 +41,7 @@ public class ImageDescriptionActivity
         Toolbar toolbar = findViewById(R.id.toolbar_image_description);
         setSupportActionBar(toolbar);
         try {
-            getSupportActionBar().setTitle("Photo");
+            getSupportActionBar().setTitle(getString(R.string.photo_title));
         } catch (Exception e) {
             e.printStackTrace();
         }
