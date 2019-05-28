@@ -12,6 +12,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -25,6 +28,7 @@ import com.crocusoft.wallpaperappwithmvp.pojo.response.PhotoPOJO;
 import com.crocusoft.wallpaperappwithmvp.util.Constant;
 import com.crocusoft.wallpaperappwithmvp.util.EndlessScrollListener;
 import com.crocusoft.wallpaperappwithmvp.util.Util;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +47,6 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
     private RandomPhotoPresenter presenter;
     private List<PhotoPOJO> photoPOJOList;
 
-    @BindView(R.id.editTextSearch)
-    EditText editTextSearch;
-
     @BindView(R.id.constraintLayoutErrorView)
     ConstraintLayout constraintLayoutErrorView;
 
@@ -57,6 +58,14 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
+
+    @BindView(R.id.search_view)
+    MaterialSearchView searchView;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    private String searchQuery="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +79,14 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView.setMenuItem(item);
+        return true;
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         presenter.fetchRandomData(false);
@@ -80,25 +97,44 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
     }
 
     private void initViews() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        editTextSearch.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (editTextSearch.getText().toString().trim().length() > 0) {
-                    presenter.searchTextEntered(editTextSearch.getText().toString());
-                } else {
-                    presenter.fetchRandomData(true);
-                }
-                hideKeyboard();
-                return true;
-            }
-            return false;
-        });
 
         initSwipeRefreshLayout();
 
         initRV();
+
+        initSearchIcons();
+    }
+
+    private void initSearchIcons() {
+        searchView.setEllipsize(true);
+        searchView.setHint(getString(R.string.search));
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchQuery = query;
+                presenter.searchTextEntered(query.trim());
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Do some magic
+                return false;
+            }
+        });
+
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                searchQuery = "";
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+
+            }
+        });
     }
 
     private void initSwipeRefreshLayout() {
@@ -139,7 +175,7 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
         recyclerView.setOnScrollListener(new EndlessScrollListener(staggeredGridLayoutManager) {
             @Override
             public void onLoadMore(int currentPage) {
-                if (editTextSearch.getText().toString().trim().length() > 0) {
+                if (searchQuery.trim().length() > 0) {
                     presenter.loadMoreSearchResult();
                 } else {
                     presenter.fetchRandomData(false);
@@ -224,5 +260,14 @@ public class RandomPhotosActivity extends AppCompatActivity implements RandomPho
 
     public void setFetcherListener(FetchingIdlingResource fetchingIdlingResource) {
         presenter.setFetchingIdlingResource(fetchingIdlingResource);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (searchView.isSearchOpen()) {
+            searchView.closeSearch();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

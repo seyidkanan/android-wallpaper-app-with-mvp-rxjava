@@ -71,6 +71,7 @@ public class RandomPhotoPresenter implements RandomPhotoContractor.Presenter {
         }
         checkInitModel();
         searchQuery = query;
+        pageForSearchAPIPagination = 1;
         interactor.getSearchResultFromApi(query, pageForSearchAPIPagination, new SearchPhotoObserver(pageForSearchAPIPagination));
     }
 
