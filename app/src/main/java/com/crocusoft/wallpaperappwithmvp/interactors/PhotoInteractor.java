@@ -6,16 +6,7 @@ import com.crocusoft.wallpaperappwithmvp.data.api.ApiInterfaces;
 import com.crocusoft.wallpaperappwithmvp.idlingResource.FetchingIdlingResource;
 import com.crocusoft.wallpaperappwithmvp.util.Constant;
 
-import org.reactivestreams.Subscriber;
-
-import io.reactivex.Observable;
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class PhotoInteractor extends BaseInteractor {
@@ -27,7 +18,6 @@ public class PhotoInteractor extends BaseInteractor {
     public PhotoInteractor() {
         apiService = ApiInitRx.getClient()
                 .create(ApiInterfaces.class);
-
     }
 
     public void setFetchingIdlingResource(FetchingIdlingResource fetchingIdlingResource) {
